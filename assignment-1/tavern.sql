@@ -166,7 +166,7 @@ INSERT INTO service_sales (service_id, guest_id, cost, amount_purchased, date_pu
 INSERT INTO service_statuses (name) VALUES ('active');
 INSERT INTO service_statuses (name) VALUES ('inactive');
 
--- Table: service_statuses
+-- Table: guests
 INSERT INTO guests (name) VALUES ('Pippin');
 INSERT INTO guests (name) VALUES ('Ron');
 INSERT INTO guests (name) VALUES ('Boromir');

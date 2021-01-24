@@ -91,13 +91,6 @@ CREATE TABLE service_statuses (
     PRIMARY KEY (id)
 );
 
--- Table: guests
-CREATE TABLE guests (
-    id int IDENTITY(1, 1),
-    name varchar(250),
-    PRIMARY KEY (id)
-);
-
 -- seed tables
 
 -- Table: taverns
@@ -166,31 +159,17 @@ INSERT INTO service_sales (service_id, guest_id, cost, amount_purchased, date_pu
 INSERT INTO service_statuses (name) VALUES ('active');
 INSERT INTO service_statuses (name) VALUES ('inactive');
 
+-- START ASSIGNMENT TWO
+
 -- Table: guests
-INSERT INTO guests (name) VALUES ('Pippin');
-INSERT INTO guests (name) VALUES ('Ron');
-INSERT INTO guests (name) VALUES ('Boromir');
-INSERT INTO guests (name) VALUES ('Ginny');
-INSERT INTO guests (name) VALUES ('Theoden');
-
-
--- add foreign keys
-
-ALTER TABLE taverns ADD FOREIGN KEY location_id References locations(id)
-ALTER TABLE taverns ADD FOREIGN KEY owner_id References users(id)
-
-ALTER TABLE basement_rats ADD FOREIGN KEY tavern_id References taverns(id)
-
-ALTER TABLE supplies ADD FOREIGN KEY tavern_id References taverns(id)
-
-ALTER TABLE supply_sales ADD FOREIGN KEY supply_id References supplies(id)
-ALTER TABLE supply_sales ADD FOREIGN KEY tavern_id References taverns(id)
-
-ALTER TABLE services ADD FOREIGN KEY tavern_id References taverns(id)
-
-ALTER TABLE service_sales ADD FOREIGN KEY service_id References services(id)
-ALTER TABLE service_sales ADD FOREIGN KEY guest_id References users(id)
-ALTER TABLE service_sales ADD FOREIGN KEY tavern_id References taverns(id)
+CREATE TABLE guests (
+    id int IDENTITY(1, 1),
+    name varchar(250),
+    notes varchar(Max),
+    birthday date,
+    cakeday date,
+    status_id int
+);
 
 -- Table: guest_statuses
 CREATE TABLE guest_statuses (
@@ -201,30 +180,69 @@ CREATE TABLE guest_statuses (
 -- Table: classes
 CREATE TABLE classes (
     id int IDENTITY(1, 1),
-    name varchar(250),
-    PRIMARY KEY (id)
-);
-
--- Table: guests
-CREATE TABLE guests (
-    id int IDENTITY(1, 1),
-    name varchar(250),
-    notes varchar(250),
-    birthday date,
-    cakeday date,
-    status_id int FOREIGN KEY REFERENCES guest_statuses(id),
-    class_id int FOREIGN KEY REFERENCES classes(id),
-    PRIMARY KEY (id)
+    name varchar(250)
 );
 
 -- Table: levels
 CREATE TABLE levels (
+    id int IDENTITY(1, 1),
     level int,
-    guest_id int FOREIGN KEY REFERENCES guests(id),
-    class_id int FOREIGN KEY REFERENCES classes(id),
+    guest_id int,
+    class_id int,
 );
 
+-- stop tracking rats
+DROP TABLE IF EXISTS basement_rats;
 
-DROP TABLE IF EXISTS basement_rats
+-- add primary keys to new tables (assignment 2) using ALTER TABLE command
+ALTER TABLE guests ADD PRIMARY KEY (id);
+ALTER TABLE guest_statuses ADD PRIMARY KEY (id);
+ALTER TABLE classes ADD PRIMARY KEY (id);
+ALTER TABLE levels ADD PRIMARY KEY (id);
+
+-- add a few guest_statuses
+INSERT INTO guest_statuses (name) VALUES ('hangry');
+INSERT INTO guest_statuses (name) VALUES ('sick');
+INSERT INTO guest_statuses (name) VALUES ('placid');
+INSERT INTO guest_statuses (name) VALUES ('fine');
+INSERT INTO guest_statuses (name) VALUES ('raging');
+
+-- add a few guests
+INSERT INTO guests (name, notes, birthday, cakeday, status_id) VALUES ('Pippin', 'eats a lot', '2021-01-24', '2021-01-24', 1);
+INSERT INTO guests (name, notes, birthday, cakeday, status_id) VALUES ('Ron', 'red hair', '2021-01-24', '2021-01-24', 2);
+INSERT INTO guests (name, notes, birthday, cakeday, status_id) VALUES ('Boromir', 'has a sword', '2021-01-24', '2021-01-24', 3)
+INSERT INTO guests (name, notes, birthday, cakeday, status_id) VALUES ('Ginny', 'also has red hair', '2021-01-24', '2021-01-24', 4)
+INSERT INTO guests (name, notes, birthday, cakeday, status_id) VALUES ('Theoden', 'is a king', '2021-01-24', '2021-01-24', 5)
+
+-- add a few guest_statuses
+
+-- add foreign keys to all existing tables using ALTER TABLE command
+
+ALTER TABLE taverns ADD FOREIGN KEY (location_id) REFERENCES locations(id);
+ALTER TABLE taverns ADD FOREIGN KEY (owner_id) REFERENCES users(id);
+
+ALTER TABLE users ADD FOREIGN KEY (role_id) REFERENCES roles(id);
+
+ALTER TABLE supplies ADD FOREIGN KEY (tavern_id) REFERENCES taverns(id);
+
+ALTER TABLE supply_sales ADD FOREIGN KEY (supply_id) REFERENCES supplies(id);
+ALTER TABLE supply_sales ADD FOREIGN KEY (tavern_id) REFERENCES taverns(id);
+
+ALTER TABLE services ADD FOREIGN KEY (tavern_id) REFERENCES taverns(id);
+
+ALTER TABLE service_sales ADD FOREIGN KEY (service_id) REFERENCES services(id);
+ALTER TABLE service_sales ADD FOREIGN KEY (guest_id) REFERENCES guests(id);
+ALTER TABLE service_sales ADD FOREIGN KEY (tavern_id) REFERENCES taverns(id);
+
+ALTER TABLE guests ADD FOREIGN KEY (status_id) REFERENCES guest_statuses(id);
+
+ALTER TABLE levels ADD FOREIGN KEY (guest_id) REFERENCES guests(id);
+ALTER TABLE levels ADD FOREIGN KEY (class_id) REFERENCES classes(id);
+
+
+-- insertions that will fail due to foreign key restraints
+-- INSERT INTO taverns (name, floor_count, owner_id, location_id) VALUES ('The Prancing Pony', 2, 'five', 'New York');
+-- INSERT INTO service_sales (service_id, guest_id, cost, amount_purchased, date_purchased, tavern_id) VALUES (5, 'guest_four', 9.99, 1, '2021-01-20 01:00:00', 'The Hogs Head Inn');
+-- INSERT INTO levels (level, guest_id, class_id) VALUES (27, 'Gandalf', 'Wizard');
 
 
