@@ -49,7 +49,6 @@ SELECT TOP 10 * FROM supply_sales ORDER BY total_cost DESC
 -- 7. Write a query to return all the values stored in all Lookup Tables - Lookup tables are the tables we reference typically with just an ID and a name. This should be a dynamic combining of all of the tables
 
 -- 8. Write a query that returns Guest Classes with Levels and Generate a new column with a label for their level grouping (lvl 1-10, 10-20, etc)
-SELECT * from guests
 
 -- 9. Write a series of INSERT commands that will insert the statuses of one table into another of your choosing using SELECT statements (See our lab in class - The INSERT commands should be generated). It’s ok if the data doesn’t match or make sense! :)
 -- * Remember, INSERT Commands look like: INSERT INTO Table1 (column1, column2) VALUES (column1, column2)
