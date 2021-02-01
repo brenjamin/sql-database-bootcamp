@@ -13,7 +13,7 @@ SELECT * FROM users WHERE role_id = 6;
 SELECT * FROM users u JOIN roles r on u.role_id = r.id AND u.role_id=6
 
 -- 3. Write a query that returns all guests ordered by name (ascending) and their classes and corresponding levels
-SELECT coung.name, c.name, l.level FROM guests g 
+SELECT g.name, c.name, l.level FROM guests g 
 JOIN levels l 
 ON g.id = l.guest_id 
 JOIN classes c ON l.class_id = c.id 
@@ -27,7 +27,7 @@ ON ss.service_id = sv.id
 ORDER BY ss.cost DESC
 
 -- 5. Write a query that returns guests with 2 or more classes
-SELECT g.name, c.name
+SELECT g.name
 FROM guests g 
 JOIN levels l 
 ON g.id = l.guest_id 
